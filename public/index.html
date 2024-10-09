@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBTI Relationship Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        :root {
+            --gradient-1: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+            --gradient-2: linear-gradient(135deg, #14b8a6, #0ea5e9, #8b5cf6);
+            --text-color: #333;
+            --background-color: #f8fafc;
+            --white: #ffffff;
+        }
+        
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        h1, h2, h3 {
+            color: #333;
+        }
+        
+        .cta-button, #analyzeButton, #generateReportButton {
+            display: inline-block;
+            background: linear-gradient(45deg, #6366f1, #a855f7);
+            color: white;
+            padding: 12px 24px;
+            font-size: 1rem;
+            text-decoration: none;
+            border: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            outline: none;
+        }
+        
+        .cta-button:hover, #analyzeButton:hover, #generateReportButton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+            background: linear-gradient(45deg, #5254cc, #9333ea);
+        }
+        
+        .cta-button:active, #analyzeButton:active, #generateReportButton:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+        
+        .hero {
+            background: var(--gradient-2);
+            color: var(--white);
+            padding: 100px 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--white);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+        
+        .features {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-item {
+            text-align: center;
+            padding: 30px;
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-item i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .main-header {
+            background-color: var(--white);
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .main-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+        
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            color: #6366f1;
+        }
+        
+        .main-footer {
+            background-color: var(--white);
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #analysis {
+            padding: 80px 0;
+            background-color: var(--background-color);
+        }
+
+        .type-selector {
+            margin-bottom: 20px;
+        }
+
+        .type-selector label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .type-selector select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        #analysisResult {
+            margin-top: 20px;
+        }
+
+        .module {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .module h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .analysis-result {
+            margin-top: 20px;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            margin-top: 20px;
+        }
+
+        .feedback-form {
+            margin-top: 30px;
+        }
+
+        .feedback-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .feedback-form button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .chat-container {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+
+        #chat-messages {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            max-width: 70%;
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background-color: #007bff;
+            color: white;
+        }
+
+        .ai-message {
+            align-self: flex-start;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        #chat-form {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        #user-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            font-size: 16px;
+        }
+
+        #chat-form button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #chat-form button:hover {
+            background-color: #0056b3;
+        }
+
+        .chart-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .intro-section {
+            background: var(--gradient-2);
+            color: var(--white);
+            padding: 100px 0;
+            text-align: center;
+        }
+        
+        .intro-section h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--white);  /* Change this line */
+        }
+        
+        .intro-section p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            color: var(--white);  /* Add this line */
+        }
+        
+        .feature-preview {
+            background-color: var(--white);
+            padding: 80px 0;
+        }
+        
+        .feature-preview h2 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-item {
+            text-align: center;
+            padding: 30px;
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-item i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .cta-section {
+            background: var(--gradient-1);
+            color: var(--white);
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--white);  /* Add this line */
+        }
+        
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: var(--white);  /* Add this line */
+        }
+        
+        #analysis-section {
+            display: none;
+        }
+
+        .dashboard-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .chart-wrapper {
+            width: 48%;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 768px) {
+            .chart-wrapper {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <header class="main-header">
+            <div class="container">
+                <a href="#" class="logo">MBTI Relationship Analysis</a>
+                <nav>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#start-analysis">Start Analysis</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <section id="home" class="intro-section">
+                <div class="container">
+                    <h1>Discover Your Relationship Dynamics with MBTI</h1>
+                    <p>Unlock the secrets of your personality and learn how to create stronger, more fulfilling relationships using the power of MBTI analysis.</p>
+                    <a href="#features" class="cta-button">Explore Features</a>
+                </div>
+            </section>
+
+            <section id="features" class="feature-preview">
+                <div class="container">
+                    <h2>What You'll Discover</h2>
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <i class="fas fa-brain"></i>
+                            <h3>Cognitive Function Analysis</h3>
+                            <p>Understand how you and your partner think and make decisions.</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-heart"></i>
+                            <h3>Compatibility Insights</h3>
+                            <p>Learn about your relationship's strengths and potential challenges.</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-comments"></i>
+                            <h3>Communication Tips</h3>
+                            <p>Discover strategies to improve understanding and reduce conflicts.</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>Growth Opportunities</h3>
+                            <p>Identify areas for personal and relationship development.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="start-analysis" class="cta-section">
+                <div class="container">
+                    <h2>Ready to Analyze Your Relationship?</h2>
+                    <p>Enter your MBTI types and unlock personalized insights.</p>
+                    <a href="#" class="cta-button" onclick="showAnalysisSection()">Start Your Analysis</a>
+                </div>
+            </section>
+
+            <section id="analysis-section" class="container">
+                <h2>MBTI Relationship Analysis</h2>
+                
+                <!-- User Input Module -->
+                <div class="module" id="user-input-module">
+                    <h3>1. Enter MBTI Types</h3>
+                    <div class="input-group">
+                        <label for="userType">Your MBTI Type:</label>
+                        <select id="userType">
+                            <option value="">Select your type</option>
+                            <option value="INTJ">INTJ</option>
+                            <option value="INTP">INTP</option>
+                            <option value="ENTJ">ENTJ</option>
+                            <option value="ENTP">ENTP</option>
+                            <option value="INFJ">INFJ</option>
+                            <option value="INFP">INFP</option>
+                            <option value="ENFJ">ENFJ</option>
+                            <option value="ENFP">ENFP</option>
+                            <option value="ISTJ">ISTJ</option>
+                            <option value="ISFJ">ISFJ</option>
+                            <option value="ESTJ">ESTJ</option>
+                            <option value="ESFJ">ESFJ</option>
+                            <option value="ISTP">ISTP</option>
+                            <option value="ISFP">ISFP</option>
+                            <option value="ESTP">ESTP</option>
+                            <option value="ESFP">ESFP</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="partnerType">Your Partner's MBTI Type:</label>
+                        <select id="partnerType">
+                            <option value="">Select partner's type</option>
+                            <option value="INTJ">INTJ</option>
+                            <option value="INTP">INTP</option>
+                            <option value="ENTJ">ENTJ</option>
+                            <option value="ENTP">ENTP</option>
+                            <option value="INFJ">INFJ</option>
+                            <option value="INFP">INFP</option>
+                            <option value="ENFJ">ENFJ</option>
+                            <option value="ENFP">ENFP</option>
+                            <option value="ISTJ">ISTJ</option>
+                            <option value="ISFJ">ISFJ</option>
+                            <option value="ESTJ">ESTJ</option>
+                            <option value="ESFJ">ESFJ</option>
+                            <option value="ISTP">ISTP</option>
+                            <option value="ISFP">ISFP</option>
+                            <option value="ESTP">ESTP</option>
+                            <option value="ESFP">ESFP</option>
+                        </select>
+                    </div>
+                    <button id="analyzeButton">Analyze Relationship</button>
+                </div>
+
+                <!-- Cognitive Function Analysis Module -->
+                <div class="module" id="cognitive-function-module">
+                    <h3>2. Cognitive Function Analysis</h3>
+                    <div class="analysis-result" id="cognitiveAnalysisResult"></div>
+                </div>
+
+                <!-- Compatibility and Conflict Prediction Module -->
+                <div class="module" id="compatibility-module">
+                    <h3>3. Compatibility and Conflict Prediction</h3>
+                    <div class="analysis-result" id="compatibilityResult"></div>
+                </div>
+
+                <!-- Emotional Dependency and Growth Module -->
+                <div class="module" id="emotional-dependency-module">
+                    <h3>4. Emotional Dependency and Growth</h3>
+                    <div class="analysis-result" id="emotionalDependencyResult"></div>
+                </div>
+
+                <!-- Conflict Resolution and Communication Module -->
+                <div class="module" id="conflict-resolution-module">
+                    <h3>5. Conflict Resolution and Communication</h3>
+                    <div class="analysis-result" id="conflictResolutionResult"></div>
+                </div>
+
+                <!-- Growth Pathway and Function Development Module -->
+                <div class="module" id="growth-pathway-module">
+                    <h3>6. Growth Pathway and Function Development</h3>
+                    <div class="analysis-result" id="growthPathwayResult"></div>
+                </div>
+
+                <!-- Relationship Health Index Module -->
+                <div class="module" id="relationship-health-module">
+                    <h3>7. Relationship Health Index</h3>
+                    <div class="chart-container">
+                        <canvas id="relationshipHealthChart"></canvas>
+                    </div>
+                    <div class="analysis-result" id="relationshipHealthResult"></div>
+                </div>
+
+                <!-- Dashboard and Visualization Module -->
+                <div class="module" id="dashboard-module">
+                    <h3>8. Relationship Dashboard</h3>
+                    <div id="dashboardCharts" class="dashboard-container">
+                        <div class="chart-wrapper">
+                            <canvas id="communicationChart"></canvas>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="emotionalBalanceChart"></canvas>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="growthTrendChart"></canvas>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="conflictResolutionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Replace the existing feedback module with this new AI chat module -->
+                <div class="module" id="ai-chat-module">
+                    <h3>9. Talk to AI</h3>
+                    <div class="chat-container">
+                        <div id="chat-messages"></div>
+                    </div>
+                    <form id="chat-form">
+                        <input type="text" id="user-input" placeholder="Type your message here..." />
+                        <button type="submit">Send</button>
+                    </form>
+                </div>
+
+                <!-- Report Generation Module -->
+                <div class="module" id="report-module">
+                    <h3>10. Generate Report</h3>
+                    <button id="generateReportButton" onclick="generateReport()">Generate Detailed Report</button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="main-footer">
+            <div class="container">
+                <p>&copy; 2023 MBTI Relationship Analysis. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        const { jsPDF } = window.jspdf;
+
+        function generateReport() {
+            const doc = new jsPDF();
+            let verticalPosition = 20; // Starting vertical position
+
+            // Add title
+            doc.setFontSize(20);
+            doc.text("MBTI Relationship Analysis Report", 20, verticalPosition);
+            verticalPosition += 10; // Move down for the next line
+            doc.setFontSize(12);
+            doc.text("This report provides insights based on the MBTI types selected.", 20, verticalPosition);
+            verticalPosition += 10; // Move down for the next line
+            doc.text("--------------------------------------------------", 20, verticalPosition);
+            verticalPosition += 10; // Move down for the next line
+
+            // Add user input
+            const userType = document.getElementById('userType').value;
+            const partnerType = document.getElementById('partnerType').value;
+            doc.text(`Your MBTI Type: ${userType}`, 20, verticalPosition);
+            verticalPosition += 10; // Move down for the next line
+            doc.text(`Partner's MBTI Type: ${partnerType}`, 20, verticalPosition);
+            verticalPosition += 10; // Move down for the next line
+            doc.text("--------------------------------------------------", 20, verticalPosition);
+            verticalPosition += 10; // Move down for the next line
+
+            // Add cognitive functions
+            doc.text("Cognitive Functions:", 20, verticalPosition);
+            verticalPosition += 10; // Move down for the next line
+            doc.text(`Your Cognitive Functions (${userType}):`, 20, verticalPosition);
+            verticalPosition += 10; // Move down for the next line
+            cognitiveFunction[userType].forEach((func, index) => {
+                doc.text(`${func} - ${functionDescriptions[func]}`, 20, verticalPosition);
+                verticalPosition += 10; // Move down for the next line
+            });
+
+            doc.text(`Your Partner's Cognitive Functions (${partnerType}):`, 20, verticalPosition);
+            verticalPosition += 10; // Move down for the next line
+            cognitiveFunction[partnerType].forEach((func, index) => {
+                doc.text(`${func} - ${functionDescriptions[func]}`, 20, verticalPosition);
+                verticalPosition += 10; // Move down for the next line
+            });
+
+            doc.text("--------------------------------------------------", 20, verticalPosition);
+            verticalPosition += 10; // Move down for the next line
+
+            // Add compatibility analysis
+            const compatibilityResult = document.getElementById('compatibilityResult').innerText;
+            doc.text("Compatibility Analysis:", 20, verticalPosition);
+            verticalPosition += 10; // Move down for the next line
+            doc.text(compatibilityResult, 20, verticalPosition);
+            verticalPosition += 10; // Move down for the next line
+
+            // Add emotional dependency analysis
+            const emotionalDependencyResult = document.getElementById('emotionalDependencyResult').innerText;
+            doc.text("Emotional Dependency Analysis:", 20, verticalPosition);
+            verticalPosition += 10; // Move down for the next line
+            doc.text(emotionalDependencyResult, 20, verticalPosition);
+            verticalPosition += 10; // Move down for the next line
+
+            // Add conflict resolution analysis
+            const conflictResolutionResult = document.getElementById('conflictResolutionResult').innerText;
+            doc.text("Conflict Resolution Analysis:", 20, verticalPosition);
+            verticalPosition += 10; // Move down for the next line
+            doc.text(conflictResolutionResult, 20, verticalPosition);
+            verticalPosition += 10; // Move down for the next line
+
+            // Add growth pathway analysis
+            const growthPathwayResult = document.getElementById('growthPathwayResult').innerText;
+            doc.text("Growth Pathway Analysis:", 20, verticalPosition);
+            verticalPosition += 10; // Move down for the next line
+            doc.text(growthPathwayResult, 20, verticalPosition);
+            verticalPosition += 10; // Move down for the next line
+
+            // Check if the content exceeds the page height
+            if (verticalPosition > 280) { // 280 is a rough estimate for A4 height
+                doc.addPage(); // Add a new page
+                verticalPosition = 20; // Reset vertical position for the new page
+            }
+
+            // Save the PDF
+            doc.save("mbti_relationship_analysis_report.pdf");
+        }
+
+        // Existing JavaScript code...
+        const cognitiveFunction = {
+            'INTJ': ['Ni', 'Te', 'Fi', 'Se'],
+            'INTP': ['Ti', 'Ne', 'Si', 'Fe'],
+            'ENTJ': ['Te', 'Ni', 'Se', 'Fi'],
+            'ENTP': ['Ne', 'Ti', 'Fe', 'Si'],
+            'INFJ': ['Ni', 'Fe', 'Ti', 'Se'],
+            'INFP': ['Fi', 'Ne', 'Si', 'Te'],
+            'ENFJ': ['Fe', 'Ni', 'Se', 'Ti'],
+            'ENFP': ['Ne', 'Fi', 'Te', 'Si'],
+            'ISTJ': ['Si', 'Te', 'Fi', 'Ne'],
+            'ISFJ': ['Si', 'Fe', 'Ti', 'Ne'],
+            'ESTJ': ['Te', 'Si', 'Ne', 'Fi'],
+            'ESFJ': ['Fe', 'Si', 'Ne', 'Ti'],
+            'ISTP': ['Ti', 'Se', 'Ni', 'Fe'],
+            'ISFP': ['Fi', 'Se', 'Ni', 'Te'],
+            'ESTP': ['Se', 'Ti', 'Fe', 'Ni'],
+            'ESFP': ['Se', 'Fi', 'Te', 'Ni']
+        };
+
+        const functionDescriptions = {
+            'Ni': 'Internal Intuition - Focuses on internal abstract patterns and insights.',
+            'Ne': 'External Intuition - Explores external possibilities and connections.',
+            'Si': 'Internal Sensing - Relies on internal sensory experiences and memories.',
+            'Se': 'External Sensing - Engages with the immediate physical environment.',
+            'Fi': 'Internal Feeling - Makes decisions based on internal values and emotions.',
+            'Fe': 'External Feeling - Considers external harmony and others\' emotions.',
+            'Ti': 'Internal Thinking - Analyzes and categorizes information internally.',
+            'Te': 'External Thinking - Organizes and structures the external world logically.'
+        };
+
+        const mbtiPairings = {
+            'ENFP': {
+                'ISTJ': {
+                    compatibility: 'Challenging but potentially complementary',
+                    strengths: 'ENFP brings creativity and innovation, while ISTJ provides stability and practicality.',
+                    challenges: 'Different approaches to planning and decision-making can cause friction.',
+                    advice: 'ENFP should develop Si to appreciate structure, while ISTJ should practice Ne to be more open to new ideas.',
+                    conflictAreas: 'Spontaneity vs. planning, abstract vs. concrete thinking',
+                    growthOpportunities: 'Balance between innovation and tradition, learning from each other\'s strengths'
+                },
+                // Add other pairings for ENFP
+            },
+            'ISTJ': {
+                'ENFP': {
+                    compatibility: 'Challenging but potentially complementary',
+                    strengths: 'ISTJ offers stability and organization, while ENFP brings enthusiasm and creativity.',
+                    challenges: 'Differing views on spontaneity and tradition can lead to misunderstandings.',
+                    advice: 'ISTJ should develop Ne to be more flexible, while ENFP should strengthen Si to value routine.',
+                    conflictAreas: 'Adherence to rules vs. flexibility, practical vs. imaginative approaches',
+                    growthOpportunities: 'Learning to appreciate different perspectives, balancing structure and creativity'
+                },
+                // Add other pairings for ISTJ
+            },
+            // Add entries for all other MBTI types
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const analyzeButton = document.getElementById('analyzeButton');
+            if (analyzeButton) {
+                analyzeButton.addEventListener('click', function() {
+                    const userType = document.getElementById('userType').value;
+                    const partnerType = document.getElementById('partnerType').value;
+
+                    if (userType && partnerType) {
+                        analyzeCognitiveFunctions(userType, partnerType);
+                        analyzeCompatibility(userType, partnerType);
+                        analyzeEmotionalDependency(userType, partnerType);
+                        analyzeConflictResolution(userType, partnerType);
+                        analyzeGrowthPathway(userType, partnerType);
+                        generateRelationshipHealthIndex(userType, partnerType);
+                        generateDashboard(userType, partnerType);
+                        
+                        // Scroll to the analysis results
+                        document.getElementById('cognitive-function-module').scrollIntoView({behavior: 'smooth'});
+                    } else {
+                        alert('Please select both MBTI types before analyzing.');
+                    }
+                });
+            }
+
+            // Add event listener for the "Start Your Analysis" button
+            const startAnalysisButton = document.querySelector('.cta-button[onclick="showAnalysisSection()"]');
+            if (startAnalysisButton) {
+                startAnalysisButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showAnalysisSection();
+                });
+            }
+        });
+
+        function showAnalysisSection() {
+            document.getElementById('analysis-section').style.display = 'block';
+            document.getElementById('analysis-section').scrollIntoView({behavior: 'smooth'});
+        }
+
+        function analyzeCognitiveFunctions(userType, partnerType) {
+            let result = `<h4>Your Cognitive Functions (${userType}):</h4><ul>`;
+            cognitiveFunction[userType].forEach((func, index) => {
+                result += `<li><strong>${func}</strong> - ${functionDescriptions[func]}<br>
+                           Position ${index + 1}: ${index === 0 ? 'Dominant' : index === 1 ? 'Auxiliary' : index === 2 ? 'Tertiary' : 'Inferior'}</li>`;
+            });
+            result += `</ul><h4>Your Partner's Cognitive Functions (${partnerType}):</h4><ul>`;
+            cognitiveFunction[partnerType].forEach((func, index) => {
+                result += `<li><strong>${func}</strong> - ${functionDescriptions[func]}<br>
+                           Position ${index + 1}: ${index === 0 ? 'Dominant' : index === 1 ? 'Auxiliary' : index === 2 ? 'Tertiary' : 'Inferior'}</li>`;
+            });
+            result += '</ul>';
+            updateModuleResult('cognitiveAnalysisResult', result);
+        }
+
+        function analyzeCompatibility(userType, partnerType) {
+            const pairing = mbtiPairings[userType]?.[partnerType] || mbtiPairings[partnerType]?.[userType];
+            let result = '';
+            if (pairing) {
+                result = `
+                    <h4>Compatibility Analysis for ${userType} and ${partnerType}:</h4>
+                    <p><strong>Compatibility:</strong> ${pairing.compatibility}</p>
+                    <p><strong>Strengths:</strong> ${pairing.strengths}</p>
+                    <p><strong>Challenges:</strong> ${pairing.challenges}</p>
+                    <p><strong>Advice:</strong> ${pairing.advice}</p>
+                    <h5>Potential Conflict Areas:</h5>
+                    <p>${pairing.conflictAreas}</p>
+                    <h5>Growth Opportunities:</h5>
+                    <p>${pairing.growthOpportunities}</p>
+                `;
+            } else {
+                result = `
+                    <p>Detailed compatibility information for ${userType} and ${partnerType} is not available in our database. 
+                    However, every MBTI pairing has unique potential for growth and understanding.</p>
+                    <p>General advice:</p>
+                    <ul>
+                        <li>Focus on open communication and understanding each other's cognitive functions.</li>
+                        <li>Appreciate the strengths that each type brings to the relationship.</li>
+                        <li>Be patient with differences and view them as opportunities for growth.</li>
+                        <li>Work on developing your inferior functions to create a more balanced dynamic.</li>
+                    </ul>
+                `;
+            }
+            updateModuleResult('compatibilityResult', result);
+        }
+
+        function analyzeEmotionalDependency(userType, partnerType) {
+            // This function would need to be expanded with specific advice for each pairing
+            const result = `<p>Based on the cognitive functions of ${userType} and ${partnerType}, 
+                            be aware of potential emotional dependency issues. Focus on developing individual strengths 
+                            while supporting each other's growth.</p>`;
+            updateModuleResult('emotionalDependencyResult', result);
+        }
+
+        function analyzeConflictResolution(userType, partnerType) {
+            // This function would need to be expanded with specific advice for each pairing
+            const result = `<p>When conflicts arise between ${userType} and ${partnerType}, 
+                            try to leverage your cognitive functions for effective communication. 
+                            ${userType} should focus on using their strengths constructively, while ${partnerType} should emphasize understanding and patience.</p>`;
+            updateModuleResult('conflictResolutionResult', result);
+        }
+
+        function analyzeGrowthPathway(userType, partnerType) {
+            // This function would need to be expanded with specific advice for each pairing
+            const result = `<p>${userType} can grow by developing their inferior function (${cognitiveFunction[userType][3]}), 
+                            while ${partnerType} can focus on strengthening their tertiary function (${cognitiveFunction[partnerType][2]}). 
+                            Together, you can support each other's personal development journey.</p>`;
+            updateModuleResult('growthPathwayResult', result);
+        }
+
+        function generateRelationshipHealthIndex(userType, partnerType) {
+            // Generate random scores for demonstration purposes
+            // In a real application, these would be calculated based on the compatibility analysis
+            const communicationScore = Math.floor(Math.random() * 100) + 1;
+            const emotionalConnectionScore = Math.floor(Math.random() * 100) + 1;
+            const conflictResolutionScore = Math.floor(Math.random() * 100) + 1;
+            const sharedValuesScore = Math.floor(Math.random() * 100) + 1;
+            const growthCompatibilityScore = Math.floor(Math.random() * 100) + 1;
+
+            const overallScore = Math.round((communicationScore + emotionalConnectionScore + conflictResolutionScore + sharedValuesScore + growthCompatibilityScore) / 5);
+
+            const result = `
+                <h4>Relationship Health Index: ${overallScore}/100</h4>
+                <p>Your ${userType}-${partnerType} relationship shows the following health indicators:</p>
+                <ul>
+                    <li>Communication: ${communicationScore}/100</li>
+                    <li>Emotional Connection: ${emotionalConnectionScore}/100</li>
+                    <li>Conflict Resolution: ${conflictResolutionScore}/100</li>
+                    <li>Shared Values: ${sharedValuesScore}/100</li>
+                    <li>Growth Compatibility: ${growthCompatibilityScore}/100</li>
+                </ul>
+                <p>Focus on improving areas with lower scores to enhance your overall relationship health.</p>
+            `;
+            updateModuleResult('relationshipHealthResult', result);
+
+            const ctx = document.getElementById('relationshipHealthChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Communication', 'Emotional Connection', 'Conflict Resolution', 'Shared Values', 'Growth Compatibility'],
+                    datasets: [{
+                        label: 'Relationship Health',
+                        data: [communicationScore, emotionalConnectionScore, conflictResolutionScore, sharedValuesScore, growthCompatibilityScore],
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        pointBackgroundColor: 'rgb(255, 99, 132)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(255, 99, 132)'
+                    }]
+                },
+                options: {
+                    elements: {
+                        line: {
+                            borderWidth: 3
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: false
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Relationship Health Index'
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateModuleResult(moduleId, result) {
+            document.getElementById(moduleId).innerHTML = result;
+        }
+
+        // Simulated AI responses
+        const aiResponses = [
+            "Based on the MBTI types you've selected, I recommend focusing on improving communication between your different cognitive functions.",
+            "Remember, the goal is to understand and appreciate your partner's perspective, even if it's different from yours.",
+            "Try to leverage your partner's strengths to complement your weaknesses, and vice versa.",
+            "It's important to recognize that no MBTI pairing is inherently incompatible. Every combination has its unique strengths and challenges.",
+            "Consider exploring activities that engage both of your dominant functions to strengthen your bond.",
+            "When conflicts arise, try to step back and consider how your MBTI differences might be influencing the situation.",
+            "Remember, personal growth is key in any relationship. Focus on developing your inferior functions to become more well-rounded.",
+        ];
+
+        document.getElementById('chat-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userInput = document.getElementById('user-input');
+            const message = userInput.value.trim();
+            if (message) {
+                addMessageToChat('user', message);
+                userInput.value = '';
+
+                // Simulate AI response
+                setTimeout(() => {
+                    const aiResponse = aiResponses[Math.floor(Math.random() * aiResponses.length)];
+                    addMessageToChat('ai', aiResponse);
+                }, 1000); // Simulate a delay for the AI response
+            }
+        });
+
+        function addMessageToChat(sender, message) {
+            const chatMessages = document.getElementById('chat-messages');
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${sender}-message`;
+            messageElement.textContent = message;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function generateDashboard(userType, partnerType) {
+            generateCommunicationChart(userType, partnerType);
+            generateEmotionalBalanceChart(userType, partnerType);
+            generateGrowthTrendChart(userType, partnerType);
+            generateConflictResolutionChart(userType, partnerType);
+        }
+
+        function generateCommunicationChart(userType, partnerType) {
+            const ctx = document.getElementById('communicationChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Verbal', 'Non-verbal', 'Written', 'Emotional'],
+                    datasets: [{
+                        label: userType,
+                        data: [randomScore(), randomScore(), randomScore(), randomScore()],
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)'
+                    }, {
+                        label: partnerType,
+                        data: [randomScore(), randomScore(), randomScore(), randomScore()],
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Communication Styles'
+                        },
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function generateEmotionalBalanceChart(userType, partnerType) {
+            const ctx = document.getElementById('emotionalBalanceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Joy', 'Trust', 'Fear', 'Surprise', 'Sadness', 'Disgust', 'Anger', 'Anticipation'],
+                    datasets: [{
+                        label: userType,
+                        data: Array(8).fill(0).map(() => randomScore()),
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                    }, {
+                        label: partnerType,
+                        data: Array(8).fill(0).map(() => randomScore()),
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Emotional Balance'
+                        },
+                    },
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: false
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function generateGrowthTrendChart(userType, partnerType) {
+            const ctx = document.getElementById('growthTrendChart').getContext('2d');
+            const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: userType,
+                        data: labels.map(() => randomScore()),
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }, {
+                        label: partnerType,
+                        data: labels.map(() => randomScore()),
+                        borderColor: 'rgb(255, 99, 132)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Personal Growth Trend'
+                        },
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function generateConflictResolutionChart(userType, partnerType) {
+            const ctx = document.getElementById('conflictResolutionChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Compromising', 'Collaborating', 'Competing', 'Avoiding', 'Accommodating'],
+                    datasets: [{
+                        data: [randomScore(), randomScore(), randomScore(), randomScore(), randomScore()],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)',
+                        ],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Conflict Resolution Styles'
+                        },
+                        legend: {
+                            position: 'right',
+                        }
+                    }
+                }
+            });
+        }
+
+        function randomScore() {
+            return Math.floor(Math.random() * 100) + 1;
+        }
+    </script>
+</body>
+</html>
